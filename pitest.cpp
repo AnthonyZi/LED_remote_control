@@ -1,18 +1,19 @@
 #include <wiringPi.h>
+#include <iostream>
 
 #define HI 1
 #define LO 0
 
-#define DELAY 600
+#define DELAY 500
 
 #define POWER 0xFF02FD
 
 void sendbit(bool bit)
 {
         digitalWrite(0, HIGH);
-        delayMicroseconds(DELAY);
-        digitalWrite(0, LOW);
         delayMicroseconds(bit ? DELAY*3 : DELAY);
+        digitalWrite(0, LOW);
+        delayMicroseconds(DELAY);
 }
 
 void sendcode(unsigned int code)
@@ -27,13 +28,16 @@ void sendcode(unsigned int code)
 void sendsignal(unsigned int code)
 {
         digitalWrite(0, LO);
-        delayMicroseconds(16*DELAY);
+        delayMicroseconds(15*DELAY);
         digitalWrite(0, HI);
-        delayMicroseconds(8*DELAY); for(int i = 0; i < 8; i++)
+        delayMicroseconds(5*DELAY);
+        for(int i = 0; i < 9; i++)
         {
                 sendbit(0);
         }
         sendcode(code);
+        digitalWrite(0, HI);
+        delay(500);
 }
 
 int main()
